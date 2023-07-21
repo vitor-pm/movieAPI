@@ -1,4 +1,4 @@
-package com.api.movies.entities.movie;
+package com.api.movies.models.movie;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
