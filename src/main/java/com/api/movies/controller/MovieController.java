@@ -1,7 +1,10 @@
 package com.api.movies.controller;
 
-import com.api.movies.models.movie.Movie;
+import com.api.movies.models.movie.MovieDTO;
 import com.api.movies.service.movie.IMovieService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +25,17 @@ public class MovieController {
     private IMovieService service;
     
     @GetMapping
-    public List<Movie> listAllMovies(){
-        return service.findAllMovies();
+    public List<MovieDTO> listAllMovies(){
+        return service.listAllMovies();
     }
 
     @PostMapping
-    public Movie insertNewMovie(@RequestBody Movie movie){
+    public MovieDTO insertNewMovie(@RequestBody MovieDTO movie){
         return service.insertNewMovie(movie);
     }
 
     @PutMapping
-    public Movie updateMovie(@RequestBody Movie movie){
+    public MovieDTO updateMovie(@RequestBody @Valid MovieDTO movie){
         return service.updateMovie(movie);
     }
 
