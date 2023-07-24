@@ -2,36 +2,47 @@ package com.api.movies.service.movie;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.movies.models.movie.Movie;
-import com.api.movies.repository.MovieRepository;
+import com.api.movies.models.movie.MovieDTO;
+import com.api.movies.service.AbstractService;
 
 @Service
-public class MovieService implements IMovieService {
+public class MovieService extends AbstractService<Movie, MovieDTO, Integer> implements IMovieService {
 
     @Autowired
-    private MovieRepository repository;
+    private ModelMapper modelMapper;
 
     @Override
-    public List<Movie> findAllMovies() {
-        return repository.findAll();
+    public Movie convertToEntity(MovieDTO model) {
+        return modelMapper.map(model, Movie.class);
     }
 
     @Override
-    public Movie insertNewMovie(Movie movie) {
-        return repository.save(movie);
+    public MovieDTO convertToModel(Movie entity) {
+        return modelMapper.map(entity, MovieDTO.class);
     }
 
     @Override
-    public Movie updateMovie(Movie movie) {
-        return repository.save(movie);
+    public MovieDTO insertNewMovie(MovieDTO movie) {
+        return insert(movie);
+    }
+
+    @Override
+    public List<MovieDTO> listAllMovies() {
+        return listAll();
+    }
+
+    @Override
+    public MovieDTO updateMovie(MovieDTO movie) {
+        return update(movie);
     }
 
     @Override
     public void deleteMovie(Integer id) {
-        repository.deleteById(id);
+        deleteById(id);
     }
-
 }

@@ -2,14 +2,14 @@ package com.api.movies.service.movie;
 
 import java.util.List;
 
-import com.api.movies.models.movie.Movie;
+import com.api.movies.models.movie.MovieDTO;
 
 public interface IMovieService {
-    public List<Movie> findAllMovies();
+    public List<MovieDTO> listAllMovies();
 
-    public Movie insertNewMovie(Movie movie);
+    public MovieDTO insertNewMovie(MovieDTO movie);
 
-    public Movie updateMovie(Movie movie);
+    public MovieDTO updateMovie(MovieDTO movie);
 
     public void deleteMovie(Integer id);
 }
