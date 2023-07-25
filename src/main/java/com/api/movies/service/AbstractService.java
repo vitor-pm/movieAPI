@@ -18,7 +18,10 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
     public JpaRepository<Entity, ID> repository;
 
     public Model insert(Model model){
-        Entity entity = repository.save(convertToEntity(model));
+        Entity entity = convertToEntity(model);
+        rulesBeforeInsert(entity);
+
+        entity = repository.save(entity);
 
         return convertToModel(entity);
     }
@@ -32,6 +35,7 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
     public Model update(Model model){
         Entity entity = convertToEntity(model);
         checkEntityBeforeUpdate(entity);
+        rulesBeforeUpdate(entity);
 
         entity = repository.save(entity);
 
@@ -43,7 +47,19 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
         repository.deleteById(id);
     }
 
-    public void checkEntityBeforeUpdate(Entity entity){
+    protected void rulesBeforeInsert(Entity entity) {
+        // if(entity instanceof AbstractAuditableEntity<?>){
+        //     ((AbstractAuditableEntity<?>) entity).setCreatedAt(LocalDateTime.now());
+        // }
+    }
+
+    protected void rulesBeforeUpdate(Entity entity) {
+        // if(entity instanceof AbstractAuditableEntity<?>){
+        //     ((AbstractAuditableEntity<?>) entity).setUpdatedAt(new Date());
+        // }
+    }
+
+    protected void checkEntityBeforeUpdate(Entity entity){
         if(entity == null)
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorsConstants.ERRO_GENERICO_UPDATE);
 
@@ -56,7 +72,7 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorsConstants.ERRO_NAO_ENCONTRADO_UPDATE); 
     }
 
-    public void checkBeforeDelete(ID id){
+    protected void checkBeforeDelete(ID id){
         if(id == null)
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorsConstants.ERRO_ID_NULO);
         

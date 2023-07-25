@@ -1,15 +1,14 @@
 package com.api.movies.models.movie;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
 import java.time.LocalDate;
-import java.util.List;
 
 import org.modelmapper.ModelMapper;
 
-import com.api.movies.models.AbstractEntity;
+import com.api.movies.models.AbstractAuditableEntity;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Data
@@ -17,7 +16,7 @@ import com.api.movies.models.AbstractEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Movie extends AbstractEntity<Integer> {
+public class Movie extends AbstractAuditableEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,16 +27,14 @@ public class Movie extends AbstractEntity<Integer> {
     private String title;
 
     @NotNull
-    @Column(name = "releaseDate", columnDefinition = "date")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "releaseDate")
     private LocalDate releaseDate;
 
-    @Column(name = "rating", columnDefinition = "int")
+    @Column(name = "rating", columnDefinition = "decimal")
     private double rating;
-
-    @Column(name = "teste")
-    private List<String> teste;
     
-    public MovieDTO pojoToDto(ModelMapper modelMapper){
+    public MovieDTO toDTO(ModelMapper modelMapper){
         return modelMapper.map(this, MovieDTO.class);
     }
 }
