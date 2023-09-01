@@ -7,6 +7,10 @@ spring:
   jpa:
     show-sql: true
     generate-ddl: false
+  flyway:
+    enabled: true
+    locations: classpath:migration
+    baseline-on-migrate: false
 
 springdoc:
   packages-to-scan:
