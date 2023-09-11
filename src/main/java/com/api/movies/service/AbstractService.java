@@ -33,7 +33,7 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
     public List<Model> listAll(){
         List<Entity> entities = repository.findAll();
 
-        return (List<Model>) entities.stream().map(this::convertToModel).collect(Collectors.toList());
+        return entities.stream().map(this::convertToModel).collect(Collectors.toList());
     }
 
     public Model update(Model model){
