@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
     @Autowired
     public JpaRepository<Entity, ID> repository;
 
+    @Autowired
+    public ModelMapper modelMapper;
+
     public Model insert(Model model){
         Entity entity = convertToEntity(model);
         rulesBeforeInsert(entity);
@@ -29,7 +33,7 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
     public List<Model> listAll(){
         List<Entity> entities = repository.findAll();
 
-        return (List<Model>) entities.stream().map(ent -> convertToModel(ent)).collect(Collectors.toList());
+        return (List<Model>) entities.stream().map(this::convertToModel).collect(Collectors.toList());
     }
 
     public Model update(Model model){
@@ -39,7 +43,7 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
 
         entity = repository.save(entity);
 
-        return (Model) convertToModel(entity);
+        return convertToModel(entity);
     }
 
     public void deleteById(ID id){
@@ -68,7 +72,7 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
 
         Optional<Entity> entityDB = repository.findById(entity.getId());
 
-        if(!entityDB.isPresent())
+        if(entityDB.isEmpty())
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorsConstants.ERRO_NAO_ENCONTRADO_UPDATE); 
     }
 

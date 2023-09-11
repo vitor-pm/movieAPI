@@ -2,8 +2,6 @@ package com.api.movies.service.movie;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.movies.models.movie.Movie;
@@ -12,9 +10,6 @@ import com.api.movies.service.AbstractService;
 
 @Service
 public class MovieService extends AbstractService<Movie, MovieDTO, Integer> implements IMovieService {
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Override
     public Movie convertToEntity(MovieDTO model) {
