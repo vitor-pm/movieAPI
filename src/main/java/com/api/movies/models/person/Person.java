@@ -2,11 +2,13 @@ package com.api.movies.models.person;
 
 import com.api.movies.enums.GenderEnum;
 import com.api.movies.models.AbstractAuditableEntity;
+import com.api.movies.models.occupation.Occupation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Data
@@ -36,5 +38,12 @@ public class Person extends AbstractAuditableEntity<Long> {
 
     @Column(name = "nacionality", columnDefinition = "varchar(255)")
     private String nacionality;
+
+    @ManyToMany
+    @JoinTable(
+            name = "person_occupation",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "occupation_id"))
+    private Set<Occupation> occupations;
     
 }

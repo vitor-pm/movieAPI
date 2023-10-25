@@ -1,0 +1,1 @@
+INSERT INTO occupation (description) VALUES ('director'), ('actor');
