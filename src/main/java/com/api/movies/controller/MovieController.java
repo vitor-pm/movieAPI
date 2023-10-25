@@ -2,45 +2,38 @@ package com.api.movies.controller;
 
 import com.api.movies.models.movie.MovieDTO;
 import com.api.movies.service.movie.IMovieService;
-
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController()
 @RequestMapping("movie")
-public class MovieController {
+public class MovieController extends BaseController {
 
     @Autowired
     private IMovieService service;
     
     @GetMapping
-    public List<MovieDTO> listAllMovies(){
-        return service.listAllMovies();
+    public ResponseEntity<List<MovieDTO>> listAllMovies(){
+        return responseOK(service.listAllMovies());
     }
 
     @PostMapping
-    public MovieDTO insertNewMovie(@RequestBody MovieDTO movie){
-        return service.insertNewMovie(movie);
+    public ResponseEntity<MovieDTO> insertNewMovie(@RequestBody @Valid MovieDTO movie) {
+        return responseCreated(service.insertNewMovie(movie));
     }
 
     @PutMapping
-    public MovieDTO updateMovie(@RequestBody @Valid MovieDTO movie){
-        return service.updateMovie(movie);
+    public ResponseEntity<MovieDTO> updateMovie(@RequestBody @Valid MovieDTO movie){
+        return responseOK(service.updateMovie(movie));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMovie(@PathVariable("id") Integer id){
+    public ResponseEntity<?> deleteMovie(@PathVariable("id") Integer id) {
         service.deleteMovie(id);
+        return respondeDelete();
     }
 }
