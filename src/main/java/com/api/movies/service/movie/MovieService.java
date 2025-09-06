@@ -12,16 +12,6 @@ import com.api.movies.service.AbstractService;
 public class MovieService extends AbstractService<Movie, MovieDTO, Integer> implements IMovieService {
 
     @Override
-    public Movie convertToEntity(MovieDTO model) {
-        return modelMapper.map(model, Movie.class);
-    }
-
-    @Override
-    public MovieDTO convertToModel(Movie entity) {
-        return modelMapper.map(entity, MovieDTO.class);
-    }
-
-    @Override
     public MovieDTO insertNewMovie(MovieDTO movie) {
         return insert(movie);
     }

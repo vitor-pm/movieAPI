@@ -1,5 +1,6 @@
 package com.api.movies.service;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +21,16 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
 
     @Autowired
     public ModelMapper modelMapper;
+
+    private final Class<Model> modelClass;
+    private final Class<Entity> entityClass;
+
+    @SuppressWarnings("unchecked")
+    public AbstractService() {
+        ParameterizedType superClass = (ParameterizedType) getClass().getGenericSuperclass();
+        this.modelClass = (Class<Model>) superClass.getActualTypeArguments()[1];
+        this.entityClass = (Class<Entity>) superClass.getActualTypeArguments()[0];
+    }
 
     public Model insert(Model model){
         Entity entity = convertToEntity(model);
@@ -82,6 +93,11 @@ public abstract class AbstractService<Entity extends AbstractEntity<ID>, Model, 
         
     }
 
-    public abstract Entity convertToEntity(Model model);
-    public abstract Model convertToModel(Entity entity);
+    public Entity convertToEntity(Model model) {
+        return modelMapper.map(model, entityClass);
+    }
+
+    public Model convertToModel(Entity entity){
+        return modelMapper.map(entity, modelClass);
+    }
 }
